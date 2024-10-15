@@ -1,4 +1,7 @@
 Hola este es una prueba de git.
-...
+
 
 linea 4 
+
+linea 6 
+estos son cambios
