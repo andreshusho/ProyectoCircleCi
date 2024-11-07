@@ -6,6 +6,7 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import java.util.HashMap;
@@ -13,8 +14,10 @@ import java.util.HashMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,43 +31,103 @@ public class UserServiceTest {
 	
 	private UserService service;
 	private IDAOUser dao;
+	private HashMap<Integer , User> db;
 	
+
 	@BeforeEach
 	public void setUp() throws Exception {
-		dao = mock(IDAOUser.class);
-		service = new UserService(dao);
+	    dao = mock(IDAOUser.class);
+	    service = new UserService(dao);
+	    db = new HashMap<>();
+	    User user = new User("user", "existinguser@example.com", "user");
+	    db.put(1, user);
 	}
+
+	@Test
+	void guardarUsuarioTest() {
+	    String nombre = "newUser";
+	    String email = "newuser@example.com";
+	    String password = "securePass"; 
+
+
+	    when(service.findUserByEmail(email)).thenReturn(null);
+	    when(dao.save(any(User.class))).thenAnswer(new Answer<Integer>() {
+	        public Integer answer(InvocationOnMock invocation) throws Throwable {
+	            User user = (User) invocation.getArguments()[0];
+	            int newId = db.size() + 1;
+	            user.setId(newId); 
+	            db.put(newId, user);
+	            return newId; 
+	        }
+	    });
+
+	    User result = service.createUser(nombre, email, password);
+
+
+	    assertNotNull(result); 
+	    assertEquals(nombre, result.getName());
+	    assertEquals(email, result.getEmail()); 
+	    assertEquals(password, result.getPassword()); 
+	    System.out.println("Usuario guardado: " + db);
+	}
+
+
+	
+	@Test
+	void actualizarDataTest() {
+		User oldUser = new User("AUser", "AEmail", "AContra");
+		oldUser.setId(1);
+		db.put(1, oldUser);
+		User newUser = new User("BUser", "AEmail", "BContra");
+		newUser.setId(1); 
+		when(service.findUserById(1)).thenReturn(oldUser);
+		when(dao.updateUser(any(User.class))).thenAnswer(new Answer<User>() {
+		    public User answer(InvocationOnMock invocation) throws Throwable {
+		        User arg = (User) invocation.getArguments()[0];
+		        db.replace(arg.getId(), arg); 
+		        System.out.println("Actualización realizada: " + db);
+
+		        return db.get(arg.getId());
+		    }
+		});
+
+		User result = service.updateUser(newUser); 
+		assertEquals("BUser", result.getName()); 
+	    assertEquals("BContra", result.getPassword());
+	    assertEquals(1, result.getId());
+	}
+	
 	
 	
 	@Test
-	void whenUserUpdateData_test() {
-		//Initialize
-		User oldUser = new User("oldUser","oldEmail","oldPassword");
-		//db.put(1, oldUser);
-		oldUser.setId(1);
-		User newUser = new User("newUser","oldEmail","newPassword");
-		newUser.setId(1);
-		when(dao.findById(1)).thenReturn(oldUser);
-		
-		when(dao.updateUser(any(User.class))).thenAnswer(new Answer<User>() {
-			// Method within the class
-			public User answer(InvocationOnMock invocation) throws Throwable{
-				// Set behavior in every invocation 
-				User arg = (User) invocation.getArguments()[0]; 
-				db.replace(arg.getId(), arg);
-				
-				// Return the invoked value
-				return db.get(arg.getId()); 
-				}
-			}
-		);
-		//Exercise
-		User result = service.updateUser(newUser);
-		
-		//Verification
-		assertThat(result.getName(),is("newUser"));
-		assertThat(result.getPassword(),is("newPassword"));
-		
+	void eliminarUserTest() {
+	    User eliminar = new User("Juan", "juan@hotmail.com", "juan123");
+	    eliminar.setId(1);
+	    db.put(1, eliminar); 
+	    
+	    when(service.findUserById(1)).thenReturn(eliminar);
+	    when(service.deleteUser(anyInt())).thenAnswer(new Answer<Boolean>() {
+	       public Boolean answer(InvocationOnMock invocation) throws Throwable {
+	            int id = (Integer) invocation.getArguments()[0];
+	            return db.remove(id) != null;
+	        }
+	    });
+
+	    System.out.println("Usuario borrado: " + db);
 	}
+	
+
+@Test
+void findUserByEmailTest() {
+
+    String email = "test@example.com";
+    User expectedUser = new User("Test User", email, "testPassword");
+    expectedUser.setId(1);
+    when(dao.findUserByEmail(email)).thenReturn(expectedUser);
+    User result = service.findUserByEmail(email);
+    assertEquals(email, result.getEmail());
+    assertEquals("Test User", result.getName());
+  }
 
 }
+

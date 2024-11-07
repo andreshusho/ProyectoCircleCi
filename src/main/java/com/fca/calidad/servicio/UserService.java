@@ -54,7 +54,7 @@ public User findUserById(int id) {
 
     
 
-    boolean deleteUser(int id) {
+      boolean deleteUser(int id) {
     	return dao.deleteById(id);
     }
 }
