@@ -27,7 +27,7 @@ class UserDAOTest extends DBTestCase {
 	
 	public UserDAOTest() {
 		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS,"com.mysql.cj.jdbc.Driver");
-		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL,"jdbc:mysql:\\Users\\ajer6\\Downloads\\DB.Browser.for.SQLite-v3.13.1-win32/user.db\"");
+		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL,"C:\\Users\\ajer6\\Downloads\\DB.Browser.for.SQLite-v3.13.1-win32\\user.db\"");
 		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME,"");
 		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD,"");	
 	
