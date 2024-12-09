@@ -12,7 +12,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.time.Duration;
 
-public class Test_Crud {
+public class Test_Crud_Agregar {
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
@@ -20,7 +20,7 @@ public class Test_Crud {
   JavascriptExecutor js;
   @Before
   public void setUp() throws Exception {
-    System.setProperty("webdriver.chrome.driver", "");
+    System.setProperty("webdriver.chrome.driver", "C:\\Users\\ajer6\\.katalon\\packages\\KSE-10.0.0\\configuration\\resources\\drivers\\chromedriver_win32\\chromedriver.exe");
     driver = new ChromeDriver();
     baseUrl = "https://www.google.com/";
     driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
@@ -28,21 +28,22 @@ public class Test_Crud {
   }
 
   @Test
-  public void testCrud() throws Exception {
+  public void testUntitledTestCase() throws Exception {
     driver.get("https://mern-crud-mpfr.onrender.com/");
     driver.findElement(By.xpath("//div[@id='root']/div/div[2]/button")).click();
     driver.findElement(By.name("name")).click();
     driver.findElement(By.name("name")).clear();
-    driver.findElement(By.name("name")).sendKeys("Andres");
+    driver.findElement(By.name("name")).sendKeys("testpruebaandres");
     driver.findElement(By.name("email")).click();
     driver.findElement(By.name("email")).clear();
-    driver.findElement(By.name("email")).sendKeys("andres@gmail.com");
+    driver.findElement(By.name("email")).sendKeys("testandres@gmail.com");
+    driver.findElement(By.name("age")).click();
     driver.findElement(By.name("age")).clear();
     driver.findElement(By.name("age")).sendKeys("22");
     driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Gender'])[2]/following::div[1]")).click();
-    driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Male'])[1]/following::div[2]")).click();
+    driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Male'])[1]/following::span[1]")).click();
     driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Woah!'])[1]/following::button[1]")).click();
-    driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Stop'])[1]/following::div[1]")).click();
+    driver.findElement(By.xpath("//i")).click();
   }
 
   @After
@@ -87,4 +88,5 @@ public class Test_Crud {
     }
   }
 }
+
 
