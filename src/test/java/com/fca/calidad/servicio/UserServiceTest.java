@@ -9,8 +9,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -128,6 +129,31 @@ void findUserByEmailTest() {
     assertEquals(email, result.getEmail());
     assertEquals("Test User", result.getName());
   }
+
+@Test
+void testBuscarTodos() {
+    
+    for (int i = 1; i <= 5; i++) {
+        User user = new User("User" + i, "user" + i + "@example.com", "password" + i);
+        user.setId(i);
+        db.put(user.getId(), user);
+    }
+
+    when(dao.findAll()).thenReturn(new ArrayList<>(db.values()));
+
+    List<User> result = service.findAllUsers();
+    
+    assertThat(result.size(), is(5));
+
+    for (User user : result) {
+        assertThat(db.containsKey(user.getId()), is(true));
+        User userInDB = db.get(user.getId());
+        assertThat(user.getName(), is(userInDB.getName()));
+        assertThat(user.getEmail(), is(userInDB.getEmail()));
+        assertThat(user.getPassword(), is(userInDB.getPassword()));
+    }
+}
+
 
 }
 
