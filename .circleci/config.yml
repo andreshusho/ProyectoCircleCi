@@ -39,7 +39,7 @@ jobs:
       - run:
           name: Pruebas katalon
           command: mvn -Dtest=Test_Crud test
-      # Then run your tests!!
+      # Then run your tests!
       
       - store_test_results:
           path: target/surefire-reports
