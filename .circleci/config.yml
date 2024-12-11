@@ -39,7 +39,7 @@ jobs:
 
       - run:
           name: Pruebas katalon
-          command: mvn -Dtest=TestAgregar TestEliminar TestEditar test
+          command: mvn -Dtest=com.fca.calidad.funcionalesTestAgregar com.fca.calidad.funcionalesTestEliminar com.fca.calidad.funcionalesTestEditar test
       # Then run your tests!
       
       - store_test_results:
