@@ -60,7 +60,7 @@ public class TestAgregar {
     driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/form/button")).click();
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
     WebElement confirmationMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[3]/div/div[2]/form/div[4]/div/div")));
-    assertEquals("Agregar", confirmationMessage.getText());
+    assertEquals("Nice one!", confirmationMessage.getText());
   }
     
   @After
